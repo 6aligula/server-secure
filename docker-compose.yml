@@ -2,17 +2,17 @@ version: '3.9'
 
 services:
   web:
-    image: php:apache
-    container_name: servidor_web
-    volumes:
-      - ./web:/var/www/html
-    ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      - APACHE_RUN_USER=${APACHE_RUN_USER}
-      - APACHE_RUN_GROUP=${APACHE_RUN_GROUP}
-    command: apache2-foreground
+  image: php:apache
+  container_name: servidor_web
+  volumes:
+    - ./web:/var/www/html
+    - ./config/apache2.conf:/etc/apache2/apache2.conf
+  ports:
+    - "80:80"
+  environment:
+    - APACHE_RUN_USER=${APACHE_RUN_USER}
+    - APACHE_RUN_GROUP=${APACHE_RUN_GROUP}
+  command: apache2-foreground
 
   db:
     image: mariadb
@@ -46,7 +46,6 @@ services:
     ports:
       - "25:25"
       - "143:143"
-      - "465:465"
       - "587:587"
       - "993:993"
     volumes:
@@ -57,7 +56,7 @@ services:
     environment:
       - ENABLE_SPAMASSASSIN=${ENABLE_SPAMASSASSIN}
       - ENABLE_CLAMAV=${ENABLE_CLAMAV}
-      - SSL_TYPE=${SSL_TYPE}
+      - SSL_TYPE=none
 
 volumes:
   maildata:
