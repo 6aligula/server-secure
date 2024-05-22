@@ -37,29 +37,5 @@ services:
       - FTP_USER_PASS=${FTP_USER_PASS}
       - FTP_USER_HOME=${FTP_USER_HOME}
 
-  mail:
-    image: tvial/docker-mailserver:latest
-    container_name: servidor_correo
-    hostname: mail
-    domainname: example.com
-    env_file: mailserver.env
-    ports:
-      - "25:25"
-      - "143:143"
-      - "587:587"
-      - "993:993"
-    volumes:
-      - ./maildata:/var/mail
-      - ./mailstate:/var/mail-state
-      - ./maillogs:/var/log/mail
-      - ./config:/tmp/docker-mailserver/
-    environment:
-      - ENABLE_SPAMASSASSIN=${ENABLE_SPAMASSASSIN}
-      - ENABLE_CLAMAV=${ENABLE_CLAMAV}
-      - SSL_TYPE=none
-
 volumes:
-  maildata:
-  mailstate:
-  maillogs:
   config:
