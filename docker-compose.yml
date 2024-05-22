@@ -6,8 +6,8 @@ services:
     container_name: servidor_web
     volumes:
       - ./web:/var/www/html
-      # - ./config/apache2.conf:/etc/apache2/apache2.conf
-      # - ./config/envvars:/etc/apache2/envvars
+      - ./config/apache2.conf:/etc/apache2/apache2.conf
+      - ./config/envvars:/etc/apache2/envvars
     ports:
       - "80:80"
     environment:

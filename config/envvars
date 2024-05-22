@@ -1,5 +1,14 @@
-# File: ./config/envvars
-
-export APACHE_RUN_USER=www-data
-export APACHE_RUN_GROUP=www-data
-export APACHE_LOG_DIR=/var/log/apache2
+unset HOME
+: ${APACHE_RUN_USER:=www-data}
+export APACHE_RUN_USER
+: ${APACHE_RUN_GROUP:=www-data}
+export APACHE_RUN_GROUP
+: ${APACHE_PID_FILE:=/var/run/apache2/apache2.pid}
+export APACHE_PID_FILE
+: ${APACHE_RUN_DIR:=/var/run/apache2}
+export APACHE_RUN_DIR
+: ${APACHE_LOCK_DIR:=/var/lock/apache2}
+export APACHE_LOCK_DIR
+: ${APACHE_LOG_DIR:=/var/log/apache2}
+export APACHE_LOG_DIR
+export LANG=C
