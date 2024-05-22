@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  web:
+    image: php:apache
+    container_name: servidor_web
+    volumes:
+      - ./web:/var/www/html
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - APACHE_RUN_USER=www-data
+      - APACHE_RUN_GROUP=www-data
+    command: apache2-foreground
+
+  db:
+    image: mariadb
+    container_name: servidor_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user_password
+    ports:
+      - "3306:3306"
+
+  ftp:
+    image: stilliard/pure-ftpd
+    container_name: servidor_ftp
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    environment:
+      - PUBLICHOST=localhost
+      - FTP_USER_NAME=user
+      - FTP_USER_PASS=password
+      - FTP_USER_HOME=/home/ftpusers/user
+
+  mail:
+    image: tvial/docker-mailserver:latest
+    container_name: servidor_correo
+    hostname: mail
+    domainname: example.com
+    env_file: mailserver.env
+    ports:
+      - "25:25"
+      - "143:143"
+      - "465:465"
+      - "587:587"
+      - "993:993"
+    volumes:
+      - ./maildata:/var/mail
+      - ./mailstate:/var/mail-state
+      - ./maillogs:/var/log/mail
+      - ./config:/tmp/docker-mailserver/
+    environment:
+      - ENABLE_SPAMASSASSIN=1
+      - ENABLE_CLAMAV=1
+      - SSL_TYPE=letsencrypt
+
+volumes:
+  maildata:
+  mailstate:
+  maillogs:
+  config:
