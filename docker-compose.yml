@@ -10,18 +10,18 @@ services:
       - "80:80"
       - "443:443"
     environment:
-      - APACHE_RUN_USER=www-data
-      - APACHE_RUN_GROUP=www-data
+      - APACHE_RUN_USER=${APACHE_RUN_USER}
+      - APACHE_RUN_GROUP=${APACHE_RUN_GROUP}
     command: apache2-foreground
 
   db:
     image: mariadb
     container_name: servidor_db
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: mydatabase
-      MYSQL_USER: user
-      MYSQL_PASSWORD: user_password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
 
@@ -32,10 +32,10 @@ services:
       - "21:21"
       - "30000-30009:30000-30009"
     environment:
-      - PUBLICHOST=localhost
-      - FTP_USER_NAME=user
-      - FTP_USER_PASS=password
-      - FTP_USER_HOME=/home/ftpusers/user
+      - PUBLICHOST=${PUBLICHOST}
+      - FTP_USER_NAME=${FTP_USER_NAME}
+      - FTP_USER_PASS=${FTP_USER_PASS}
+      - FTP_USER_HOME=${FTP_USER_HOME}
 
   mail:
     image: tvial/docker-mailserver:latest
@@ -55,9 +55,9 @@ services:
       - ./maillogs:/var/log/mail
       - ./config:/tmp/docker-mailserver/
     environment:
-      - ENABLE_SPAMASSASSIN=1
-      - ENABLE_CLAMAV=1
-      - SSL_TYPE=letsencrypt
+      - ENABLE_SPAMASSASSIN=${ENABLE_SPAMASSASSIN}
+      - ENABLE_CLAMAV=${ENABLE_CLAMAV}
+      - SSL_TYPE=${SSL_TYPE}
 
 volumes:
   maildata:
