@@ -2,21 +2,23 @@ version: '3.9'
 
 services:
   web:
-    image: php:apache
+    build: .
     container_name: servidor_web
-    volumes:
-      - ./web:/var/www/html
-      - ./config/apache2.conf:/etc/apache2/apache2.conf
-      - ./config/envvars:/etc/apache2/envvars
     ports:
       - "80:80"
     environment:
-      - APACHE_RUN_USER=${APACHE_RUN_USER}
-      - APACHE_RUN_GROUP=${APACHE_RUN_GROUP}
-    command: /bin/bash -c "mkdir -p /etc/apache2/logs && apache2-foreground"
+      - APACHE_RUN_USER=${APACHE_RUN_USER:-www-data}
+      - APACHE_RUN_GROUP=${APACHE_RUN_GROUP:-www-data}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    networks:
+      - webnet
 
   db:
-    image: mariadb
+    image: mariadb:latest
     container_name: servidor_db
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -25,9 +27,16 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    networks:
+      - webnet
 
   ftp:
-    image: stilliard/pure-ftpd
+    image: stilliard/pure-ftpd:latest
     container_name: servidor_ftp
     ports:
       - "21:21"
@@ -37,6 +46,8 @@ services:
       - FTP_USER_NAME=${FTP_USER_NAME}
       - FTP_USER_PASS=${FTP_USER_PASS}
       - FTP_USER_HOME=${FTP_USER_HOME}
+    networks:
+      - webnet
 
-volumes:
-  config:
+networks:
+  webnet:
