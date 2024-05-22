@@ -13,7 +13,7 @@ services:
     environment:
       - APACHE_RUN_USER=${APACHE_RUN_USER}
       - APACHE_RUN_GROUP=${APACHE_RUN_GROUP}
-    command: apache2-foreground
+    command: /bin/bash -c "mkdir -p /etc/apache2/logs && apache2-foreground"
 
   db:
     image: mariadb
